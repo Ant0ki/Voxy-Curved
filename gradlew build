@@ -1,0 +1,37 @@
+The jar is written to `build/libs/voxy-curve-<version>.jar`. On Windows use `gradlew.bat build`. If your system Java is older, set `JAVA_HOME` to a JDK 25 install first.
+
+## How it works
+
+Voxy is not a compile-time dependency. The addon uses string-targeted mixins and reflection, and contains no Voxy code.
+
+1. `MixinVoxyShaderLoader` hooks `ShaderLoader.parse` and patches the resolved LOD terrain vertex shader (`voxy:lod/gl46/quads3.vert`). It adds a `voxycurve_apply` function and calls it on the world-space point just before the MVP multiply.
+2. The function lowers each vertex by `drop * t^2`, where `t` runs from 0 to 1 across the curved band. The distance is measured from `cameraSubPos`.
+3. `MixinVoxyShader` hooks `Shader.bind()` and uploads a `voxyCurve` uniform to any program that declares it. Because it reads the config every bind, menu changes apply instantly.
+4. `VoxyBridge` reads Voxy's `sectionRenderDistance` by reflection (x512 = blocks) so the curved band always scales with your render distance.
+
+If Voxy changes the shader text the patch relies on, the addon logs a warning and does nothing instead of crashing.
+
+## Configuration
+
+Edit it in-game under Video Settings, in the **Voxy Curve** tab, or in `config/voxycurve.json`.
+
+## Known limitations
+
+- Iris shader packs are not supported or tested
+- Large far LOD quads bend linearly, so the outer edge can look slightly angular
+- Voxy's culling doesn't know about the curve, so some pop-in may appear at the horizon
+- Fog and sky are not adjusted to match the curve
+
+## AI disclosure
+
+This project was developed with generative AI assistance. Most of the code was written by an AI assistant (Claude, by Anthropic) from my design direction, and I built, tested and tuned it in-game. The logo was produced by AI-written drawing code, and the documentation and in-game text were drafted with AI. The mod does not use AI at runtime.
+
+## Credits
+
+- [Voxy](https://modrinth.com/mod/voxy) by MCRcortex. This is an independent addon and is not affiliated with Voxy's author. It includes none of Voxy's code.
+- [Sodium](https://modrinth.com/mod/sodium) by CaffeineMC, whose config API powers the settings screen.
+- [Fabric](https://fabricmc.net/)
+
+## License
+
+[MIT](LICENSE)
