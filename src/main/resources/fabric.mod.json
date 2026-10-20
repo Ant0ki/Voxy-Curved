@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "voxycurve",
+  "version": "${version}",
+  "name": "Voxy Curve",
+  "description": "Addon for Voxy: curves the farthest LOD terrain downward to fake a planet horizon.",
+  "authors": ["you"],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["me.voxycurve.VoxyCurveMod"],
+    "sodium:config_api_user": ["me.voxycurve.config.CurveConfigMenu"]
+  },
+  "mixins": [
+    { "config": "voxycurve.mixins.json", "environment": "client" }
+  ],
+  "depends": {
+    "minecraft": "~26.2",
+    "fabricloader": ">=0.14.22",
+    "voxy": "*",
+    "sodium": "*"
+  }
+}

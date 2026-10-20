@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "me.voxycurve.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "MixinVoxyShaderLoader",
+    "MixinVoxyShader"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
